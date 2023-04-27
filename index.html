@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Chart.js サンプル</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <script src="custom.chart.plugins.js"></script>
+    <script src="custom.chart.js"></script>
+    <script src="index.js"></script>
+  </head>
+  <body>
+    <div class="contents-container">
+      <textarea rows="8" cols="80">
+目標：Chart.jsでグラフを作成する
+理由：実務で実装したグラフを作り直したい。想定より制作速度が遅く、追加・変更に強いコードで実装ができなかったため。
+行動：下記の要件を満たすグラフの作成
+達成条件：下記の要件を満たすグラフの完成
+
+■ 要件
+実務で実装したグラフの機能に下記を追加する。
+
+〇グラフの種類
+・棒グラフ（積み上げ）
+
+〇カラーピッカーの値に応じて、下記の色を変更できるようにする。
+・メモリ（縦）の色
+・メモリ（横）の色
+
+〇カラピッカーとテキスト入力フォームの値に応じて下記の色を変更できるようにする
+・棒の背景色
+・棒の枠線の色
+・hover時の棒の背景色
+・hover時の棒の枠線の色
+
+〇入力フォームの値に応じて、描画範囲外に棒が突き抜けた場合の画像・文言を変更できるようにする。
+
+〇このグラフがページ内に複数存在しても、同じデータを参照し、問題なく表示されるようにする。
+      </textarea>
+
+      <div class="block">
+        <p><s style="font-size: 12px">フロントのお荷物</s>IE11がサポートを終了したのでES6で作成</p>
+      </div>
+
+      <div class="block">
+        <div class="chart"></div>
+      </div>
+
+      <div class="block">
+        <p class="heading">データの選択</p>
+        <div class="buttons">
+          <label>
+            <input type="radio" name="dataSelector" value="chart1Data1" checked> データ1
+          </label>
+          <label>
+            <input type="radio" name="dataSelector" value="chart1Data2"> データ2
+          </label>
+        </div>
+      </div>
+
+      <div class="block">
+        <p class="heading">メモリの色の選択</p>
+
+        <div class="color-pickers">
+          <div>
+            メモリ（X）の色：<input type="color" id="ticksColorSelector1">
+          </div>
+          <div>
+            メモリ（Y）の色：<input type="color" id="ticksColorSelector2">
+          </div>
+          <div>
+            すべてのメモリの色：<input type="color" id="ticksColorSelectorAll">
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <p class="heading">色の選択</p>
+
+        <div class="color-pickers">
+          <div>
+            data1の棒の色：<input type="color" id="bgColorSelector1">
+          </div>
+          <div>
+            data2の棒の色：<input type="color" id="bgColorSelector2">
+          </div>
+          <div>
+            すべての棒の色：<input type="color" id="bgColorSelectorAll">
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <p class="heading">hover時の色の選択</p>
+
+        <div class="color-pickers">
+          <div>
+            hover時のdata1の棒の色：<input type="color" id="hoverBgColorSelector1">
+          </div>
+          <div>
+            hover時のdata2の棒の色：<input type="color" id="hoverBgColorSelector2">
+          </div>
+          <div>
+            hover時のすべての棒の色：<input type="color" id="hoverBgColorSelectorAll">
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <p class="heading">枠線の色の選択</p>
+
+        <div class="color-pickers">
+          <div>
+            data1の棒の枠線の色：<input type="color" id="borderColorSelector1">
+          </div>
+          <div>
+            data2の棒の枠線の色：<input type="color" id="borderColorSelector2">
+          </div>
+          <div>
+            すべての棒の枠線の色：<input type="color" id="borderColorSelectorAll">
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <p class="heading">hover時の枠線の色の選択</p>
+
+        <div class="color-pickers">
+          <div>
+            hover時のdata1の棒の枠線の色：<input type="color" id="hoverBorderColorSelector1">
+          </div>
+          <div>
+            hover時のdata2の棒の枠線の色：<input type="color" id="hoverBorderColorSelector2">
+          </div>
+          <div>
+            hover時のすべての棒の枠線の色：<input type="color" id="hoverBorderColorSelectorAll">
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <p class="heading">描画範囲外まで伸びたグラフの文言の設定</p>
+
+        <div class="color-pickers">
+          <label>
+            文言：<input type="text" id="overflowText">
+          </label>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="chart"></div>
+      </div>
+    </div>
+
+
+    <script id="chart1Data1" type="application/json">
+    [
+      {
+        "label": "10万～",
+        "data1": 10,
+        "data2": 20
+      },
+      {
+        "label": "20万～",
+        "data1": 5,
+        "data2": 10
+      },
+      {
+        "label": "30万～",
+        "data1": 10,
+        "data2": 20
+      },
+      {
+        "label": "40万～",
+        "data1": 10,
+        "data2": 20
+      }
+    ]
+    </script>
+    <script id="chart1Data2" type="application/json">
+    [
+      {
+        "label": "50万～",
+        "data1": 15,
+        "data2": 50
+      },
+      {
+        "label": "60万～",
+        "data1": 5,
+        "data2": 10
+      },
+      {
+        "label": "70万～",
+        "data1": 10,
+        "data2": 20
+      },
+      {
+        "label": "80万～",
+        "data1": 10,
+        "data2": 20
+      }
+    ]
+    </script>
+  </body>
+</html>
