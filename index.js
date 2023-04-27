@@ -95,7 +95,7 @@ window.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  // 棒の色の選択
+  // メモリの色の選択
   const ticksColorSelector1 = document.getElementById('ticksColorSelector1');
   const ticksColorSelector2 = document.getElementById('ticksColorSelector2');
   const ticksColorSelectorAll = document.getElementById('ticksColorSelectorAll');
